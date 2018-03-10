@@ -16,8 +16,8 @@ for v in tf.get_collection('variables'):
 print(sess.run(tf.global_variables()))
 
 # get saved weights
-W = tf.get_collection('variables')[0]
-b = tf.get_collection('variables')[1]
+W = tf.get_collection('variable2')[0]
+b = tf.get_collection('variable2')[1]
 
 # placeholders for test images and labels
 x = tf.placeholder(tf.float32, [None, 784],name='x')
@@ -34,3 +34,4 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 accu=sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})
 print(accu)
+

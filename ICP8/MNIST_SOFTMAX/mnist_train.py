@@ -6,24 +6,17 @@ from tensorflow.contrib.session_bundle import exporter
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
-
-
 sess = tf.Session()
 tf.logging.set_verbosity(tf.logging.INFO)
-
 x = tf.placeholder(tf.float32, [None, 784],name='x')
 W = tf.Variable(tf.zeros([784, 10]),name='W')
 b = tf.Variable(tf.zeros([10]),name='b')
-
 y = tf.nn.softmax(tf.matmul(x, W) + b,name='y')
 y_ = tf.placeholder(tf.float32, [None, 10],name='y_')
-tf.add_to_collection('variables',W)
-tf.add_to_collection('variables',b)
-
+tf.add_to_collection('variable2',W)
+tf.add_to_collection('variable2',b)
 cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=y, labels=y_))
-
 train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
-
 # save summaries for visualization
 tf.summary.histogram('weights', W)
 tf.summary.histogram('max_weight', tf.reduce_max(W))
@@ -42,6 +35,8 @@ sess.run(init)
 for i in range(1000):
     batch_xs, batch_ys = mnist.train.next_batch(100)
     summary, _ = sess.run([merged, train_step], feed_dict={x: batch_xs, y_: batch_ys})
+    loss = sess.run(cross_entropy, feed_dict={x: batch_xs, y_: batch_ys})
+    print('loss = ',loss)
     trainwriter.add_summary(summary, i)
 
 # model export path
